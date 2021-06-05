@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { GenreResponseProps } from "../components/SideBar";
+import { useGenre } from "../hooks/useGenre";
 import { api } from "../services/api";
 import { MovieCard } from "./MovieCard";
 interface MovieProps {
@@ -17,14 +18,14 @@ interface ContentProps {
   selectedGenre: GenreResponseProps
 }
 
-export function Content({ selectedGenre }: ContentProps) {
+export function Content() {
   const [movies, setMovies] = useState<MovieProps[]>([]);
+  const { selectedGenre } = useGenre();
 
   useEffect(() => {
     api.get<MovieProps[]>(`movies/?Genre_id=${selectedGenre.id}`).then(response => {
       setMovies(response.data);
     });
-
   }, [selectedGenre.id]);
 
   return (
